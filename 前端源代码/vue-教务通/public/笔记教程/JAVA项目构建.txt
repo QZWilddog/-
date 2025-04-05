@@ -1,0 +1,36 @@
+创建一个空项目后：
+ 先设置jdk版本
+ 再检查maven环境：build tools ->Maven  -> Maven路径，用户配置文件.xml，本地仓库
+ 项目编码字符集：Editor->File Encodings -> 项目编码等 都设置utf-8
+
+
+
+网站开发模式：	
+	前后端分离开发：前后端开发和部署都是分开的都遵守接口文档进行开发。
+	流程：需求分析-》接口定义-》前后端并行开发-》测试-》前后端联调测试
+
+
+
+前端部署：
+    build打包(主要打包src下的文件 配置文件等不会被打包)
+
+    nginx:将打包后的assets放到html文件夹中  nginx.exe启动nginx 默认占用80端口
+         在nginx.conf 中配置反向代理
+         nginx.exe -s reload 重新加载nginx配置文件
+         nginx.exe -s stop 关闭nginx服务器
+         Nginx默认占用80端口号，如果80端口号被占用，可以在nginx.conf中修改端口号。(netstat –ano | findStr  80)
+
+    
+    
+
+    nginx:介绍：Nginx是一款轻量级的Web服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。其特点是占有内存少，并发能力强，
+	在各大型互联网公司都有非常广泛的使用。
+    
+    目录结构： 
+        conf:nginx配置文件目录
+        contrib:在许多开源项目中，“contrib”通常指的是用户提交的代码、补丁或其他类型的贡献。
+        docs:一般指项目的文档部分，包括但不限于安装指南、使用手册、API 文档等。
+        html:静态资源文件存放目录（html,css,js）
+        logs:nginx日志文件存放目录
+        temp:nginx临时文件存放目录
+        nginx.exe:可执行文件

@@ -1,0 +1,2 @@
+npm install ：安装项目所需的依赖包
+npm run dev ：启动开发服务器
