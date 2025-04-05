@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--    继承父工程-->
+    <parent>
+        <groupId>cn.zimeedu</groupId>
+        <artifactId>tlias-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <!--        用来指定父工程pom文件的相对位置-->
+        <relativePath>../tlias-parent/pom.xml</relativePath>
+    </parent>
+
+    <!--    当前工程坐标，如果继承的父工程名字Id与子工程一致，就可以省略名字-->
+    <!--    <groupId>cn.zimeedu</groupId>-->
+    <artifactId>tlias-utils</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+
+        <!--阿里云OSS依赖-->
+        <!--        在Maven工程中使用OSS Java SDK，只需在pom.xml中加入相应依赖即可。以在<dependencies>中加入3.17.4版本的依赖为例：-->
+        <!--        分模块设计 因为引入带有OSS依赖的模块 所以可以进行依赖传递 -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+        </dependency>
+        <!--        如果使用的是Java 9及以上的版本，则需要添加以下JAXB相关依赖。-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+        </dependency>
+        <!-- no more than 2.3.3-->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
+
+        <!-- JWT依赖-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
