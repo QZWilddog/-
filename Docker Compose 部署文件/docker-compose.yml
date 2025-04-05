@@ -1,0 +1,43 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - "/usr/local/app/mysql/conf:/etc/mysql/conf.d"
+      - "/usr/local/app/mysql/data:/var/lib/mysql"
+      - "/usr/local/app/mysql/init:/docker-entrypoint-initdb.d"
+    networks:
+      - tlias-net
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "8080:8080"
+    networks:
+      - tlias-net
+    depends_on:
+      - mysql
+  # nginx:    nginx用docker部署 出现很多问题  不清楚是docker Bug还是我的问题  所以nginx直接部署在服务器上 不用容器部署
+  #   image: nginx:1.26.3
+  #   container_name: nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - "/usr/local/app/nginx/conf/nginx.conf:/usr/share/nginx/conf/nginx.conf"
+  #     - "/usr/local/app/nginx/html:/usr/share/nginx/html"
+  #     - "/usr/local/app/nginx/cert:/usr/share/nginx/cert"
+  #   depends_on:
+  #     - app
+  #   networks:
+  #     - tlias-net
+networks:
+  tlias-net:
+    name: jwt
