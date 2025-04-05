@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 定义项目的父项目 继承springboot项目父工程 当前tlias父工程继承了springboot项目父工程-->
+    <parent>
+        <!-- 父项目的组ID -->
+        <groupId>org.springframework.boot</groupId>
+        <!-- 父项目的Artifact ID -->
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <!-- 父项目的版本 -->
+        <version>3.4.3</version>
+        <!-- 父项目的相对路径，这里自闭和表示从本地仓库查找这个依赖 本地没有这个依赖将从中央仓库中查找-->
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+<!--    聚合各个模块工程，对工程的操作都在聚合这个模块上进行-->
+    <modules>
+        <module>../tlias-pojo</module>
+        <module>../tlias-utils</module>
+        <module>../tlias-web-management</module>
+    </modules>
+
+<!--    当前工程坐标-->
+    <groupId>cn.zimeedu</groupId>
+    <artifactId>tlias-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+<!--    将这个工程打包方式设置为pom类型 默认是内嵌tomcat jar包-->
+    <packaging>pom</packaging>
+
+<!--    自定义属性-->
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+<!--     自定义属性   自定义名字 规范一些 -->
+        <lombok.version>1.18.36</lombok.version>
+        <jwt.version>0.9.1</jwt.version>
+    </properties>
+
+<!--    直接引入依赖-->
+    <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <!--            在springboot中不用指定版本因为在父工程中已经统一管理版本了 -->
+            <version>${lombok.version}</version>
+        </dependency>
+        <!--        因为这个实体类模块中的实体类用到了这个springboot核心包中的注解,所以要引入核心依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>3.4.3</version>
+        </dependency>
+
+    </dependencies>
+
+<!--    统一管理依赖的版本，不直接引入依赖，而是子工程在引入这个依赖时，不用指定依赖版本-->
+    <dependencyManagement>
+
+        <dependencies>
+            <!--阿里云OSS依赖-->
+            <!--        在Maven工程中使用OSS Java SDK，只需在pom.xml中加入相应依赖即可。以在<dependencies>中加入3.17.4版本的依赖为例：-->
+            <!--        分模块设计 因为引入带有OSS依赖的模块 所以可以进行依赖传递 -->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>3.17.4</version>
+            </dependency>
+            <!--        如果使用的是Java 9及以上的版本，则需要添加以下JAXB相关依赖。-->
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>activation</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <!-- no more than 2.3.3-->
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>2.3.3</version>
+            </dependency>
+
+            <!-- JWT依赖-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+<!--&lt;!&ndash;  黑马教程  配置私服地址，当前地址向那个私服上传&ndash;&gt;-->
+<!--    <distributionManagement>-->
+<!--        &lt;!&ndash; release版本的发布地址 私服&ndash;&gt;-->
+<!--        <repository>-->
+<!--            <id>maven-releases</id>-->
+<!--            <url>http://localhost:8081/repository/maven-releases/</url>-->
+<!--        </repository>-->
+<!--        &lt;!&ndash; snapshot版本的发布地址 私服&ndash;&gt;-->
+<!--        <snapshotRepository>-->
+<!--            <id>maven-snapshots</id>-->
+<!--            <url>http://localhost:8081/repository/maven-snapshots/</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
+</project>
