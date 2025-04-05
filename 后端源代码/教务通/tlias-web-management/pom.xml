@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 定义Maven项目的根元素，指定命名空间和XSD模式位置 -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 指定POM模型的版本 -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--    多重继承父工程-->
+    <parent>
+<!--        用于定义当前 Maven 项目的组 ID  groupId  artifactId它们共同标识了一个 Maven 项目的唯一性-->
+        <groupId>cn.zimeedu</groupId>
+<!--        即项目的名称或标识符  用来指定该 Maven 项目本身的名称-->
+        <artifactId>tlias-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <!--   用来指定父 POM 文件相对于当前子模块的位置 默认从本地仓库查找-->
+        <relativePath>../tlias-parent/pom.xml</relativePath>
+    </parent>
+
+
+    <!--    当前工程坐标，如果继承的父工程名字Id与子工程一致，就可以省略名字-->
+    <!--    <groupId>cn.zimeedu</groupId>-->
+    <!-- 项目的Artifact ID -->
+    <artifactId>tlias-web-management</artifactId>
+    <!-- 项目的版本 -->
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- 项目的名称 则提供了一个人类可读的名称，使得人们更容易理解和识别项目的目的和内容 -->
+    <name>tlias-web-management</name>
+
+    <!-- 项目的描述 -->
+    <description>tlias-web-management</description>
+    <!-- 项目的URL，这里为空 -->
+    <url/>
+    <!-- 项目的许可证信息 -->
+    <licenses>
+        <!-- 一个许可证条目，这里为空 -->
+        <license/>
+    </licenses>
+    <!-- 项目的开发者信息 -->
+    <developers>
+        <!-- 一个开发者条目，这里为空 -->
+        <developer/>
+    </developers>
+    <!-- 项目的SCM（软件配置管理）信息 -->
+    <scm>
+        <!-- 连接到SCM的URL -->
+        <connection/>
+        <!-- 开发者连接到SCM的URL -->
+        <developerConnection/>
+        <!-- SCM中的标签 -->
+        <tag/>
+        <!-- SCM的URL -->
+        <url/>
+    </scm>
+
+    <!-- 项目的属性 -->
+    <properties>
+        <!-- 指定Java版本 -->
+        <java.version>21</java.version>
+    </properties>
+
+    <!-- 项目的依赖项 -->
+    <dependencies>
+
+        <!-- Spring Boot Web启动器依赖 -->
+        <dependency>
+            <!-- 依赖的组ID -->
+            <groupId>org.springframework.boot</groupId>
+            <!-- 依赖项目的名称-->
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- MyBatis Spring Boot启动器依赖 Mybatis依赖 -->
+        <dependency>
+            <!-- 依赖的组ID -->
+            <groupId>org.mybatis.spring.boot</groupId>
+            <!-- 依赖项目的名称-->
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <!-- 依赖的版本 -->
+            <version>3.0.4</version>
+        </dependency>
+
+        <!-- MySQL连接器依赖，运行时范围 MySQL驱动依赖 -->
+        <dependency>
+            <!-- 依赖的组ID -->
+            <groupId>com.mysql</groupId>
+            <!-- 依赖项目的名称-->
+            <artifactId>mysql-connector-j</artifactId>
+            <!-- 依赖的范围 -->
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Spring Boot测试启动器依赖，测试范围 -->
+        <dependency>
+            <!-- 依赖的组ID -->
+            <groupId>org.springframework.boot</groupId>
+            <!-- 依赖项目的名称-->
+            <artifactId>spring-boot-starter-test</artifactId>
+            <!-- 依赖的范围 -->
+            <scope>test</scope>
+        </dependency>
+
+        <!--分页插件PageHelper-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+
+        <!-- JWT依赖-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
+
+        <!-- AOP依赖起步依赖 都是spring工程 所以继承了父工程的版本-->
+        <dependency> <!--这是 Maven 中用于定义依赖项的根标签-->
+            <groupId>org.springframework.boot</groupId> <!--该标签用于指定依赖项所属的组织或项目组-->
+            <artifactId>spring-boot-starter-aop</artifactId><!--此标签用于指定依赖项的具体名称-->
+        </dependency>
+
+        <!-- MyBatis Spring Boot测试启动器依赖，测试范围 -->
+        <dependency>
+            <!-- 依赖的组ID -->
+            <groupId>org.mybatis.spring.boot</groupId>
+            <!-- 依赖的Artifact ID -->
+            <artifactId>mybatis-spring-boot-starter-test</artifactId>
+            <!-- 依赖的版本 -->
+            <version>3.0.4</version>
+            <!-- 依赖的范围 -->
+            <scope>test</scope>
+        </dependency>
+
+<!--        引入分模块设计与开发 分出去的依赖使用-->
+<!--        Tlias-Pojo实体类包 -->
+        <dependency>
+            <groupId>cn.zimeedu</groupId>
+            <artifactId>tlias-pojo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+<!--        Tlias-utils工具类包-->
+        <dependency>
+            <groupId>cn.zimeedu</groupId>
+            <artifactId>tlias-utils</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <!-- 项目的构建配置 -->
+    <build>
+        <!-- 构建插件 -->
+        <plugins>
+            <!-- Maven编译器插件 -->
+            <plugin>
+                <!-- 插件的组ID -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <!-- 插件的Artifact ID -->
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- 插件的配置 -->
+                <configuration>
+                    <!-- 注解处理器路径 -->
+                    <annotationProcessorPaths>
+                        <!-- 一个注解处理器路径 -->
+                        <path>
+                            <!-- 注解处理器的组ID -->
+                            <groupId>org.projectlombok</groupId>
+                            <!-- 注解处理器的Artifact ID -->
+                            <artifactId>lombok</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <!-- Spring Boot Maven插件 -->
+            <plugin>
+                <!-- 插件的组ID -->
+                <groupId>org.springframework.boot</groupId>
+                <!-- 插件的Artifact ID -->
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- 插件的配置 -->
+                <configuration>
+                    <!-- 排除的依赖项 -->
+                    <excludes>
+                        <!-- 一个排除的依赖项 -->
+                        <exclude>
+                            <!-- 排除依赖的组ID -->
+                            <groupId>org.projectlombok</groupId>
+                            <!-- 排除依赖的Artifact ID -->
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

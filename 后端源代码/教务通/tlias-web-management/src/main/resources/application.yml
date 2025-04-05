@@ -1,0 +1,48 @@
+# Spring 项目默认监听 localhost（即 127.0.0.1），这意味着它只能在本地访问。你可以将其配置为监听所有可用的网络接口，这样外部设备就能通过你的服务器 IP 地址访问项目了。
+#server:
+#  address: 0.0.0.0
+
+spring:
+  application:
+    name: tlias-web-management # 配置Spring应用的名称为tlias-web-management
+  # 数据源配置  数据库连接四要素
+  datasource:
+    url: jdbc:mysql://localhost/tlias #数据库访问的url地址
+    driver-class-name: com.mysql.cj.jdbc.Driver #数据库驱动类类名
+    username: root #访问数据库-用户名
+    password: 123456 #访问数据库-密码
+
+  servlet:
+    multipart:
+      # 最大单个文件大小
+      max-file-size: 10MB
+      # 最大请求大小（包括所有文件和表单数据）
+      max-request-size: 100MB
+
+
+
+# MyBatis 配置
+mybatis:
+  # MyBatis 配置
+  configuration:
+    # MyBatis 日志实现，使用标准输出作为日志输出
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 开启 MyBatis 的下划线命名到驼峰命名的自动映射功能， 开启驼峰命名映射(推荐)：如果字段名与属性名符合驼峰命名规则，mybatis会自动进行映射。
+    # 例如数据库表中的字段名 user_name 会自动映射到 Java 对象中的属性名 userName
+    map-underscore-to-camel-case: true
+
+    #指定XML映射配置文件的位置  没有规范的话
+#  mapper-locations: classpath:mapper/*.xml
+
+
+#spring事务管理日志  为某个类设置日志级别  开启事务管理日志
+logging:
+  level:
+    org.springframework.jdbc.support.JdbcTransactionManager: debug
+
+# 阿里云OSS
+aliyun:
+  oss:
+    endpoint: https://oss-cn-beijing.aliyuncs.com   # 阿里云 OSS 的访问域名（Endpoint）
+    bucketName: javaailearn  # 阿里云 OSS 的存储空间名称（Bucket Name）
+    reqion: cn-beijing   #  阿里云 OSS 所属的区域（Region）

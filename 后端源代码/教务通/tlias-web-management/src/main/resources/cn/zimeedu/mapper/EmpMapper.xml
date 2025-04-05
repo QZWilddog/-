@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--头信息 约束 不动-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--        1. XML映射文件的名称与Mapper接口名称一致，并且将XML映射文件和Mapper接口放置在相同包下（同包同名）-->
+<!--        2. XML映射文件的namespace属性为Mapper接口全限定名(包名+类名)一致-->
+<mapper namespace="cn.zimeedu.mapper.EmpMapper">
+    <!--    3. XML映射文件中sql语句的id与Mapper接口中的方法名一致，并保持返回类型一致。-->
+    <!--    resultType查询返回的单条记录向哪里封装所以是User(全类名)不是List<User>  使用pagehelper后结束不能加;号-->
+
+    <update id="updateById">
+        update emp
+        <set>  <!--自动生成set关键字，会自动删除更新字段后多余的 ,号-->
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="job != null">job = #{job},</if>
+            <if test="salary != null">salary = #{salary},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="entryDate != null">entry_date = #{entryDate},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+<!--    resultType="cn.zimeedu.pojo.Emp" 自动结果封装 只能一个结果 resultMap手动结果封装 可以解决高并发问题 不拆分成两个 -->
+    <select id="getById" resultMap="empResultMap">
+--         查询回显
+           select e.*,
+                  ee.id ee_id,
+                  ee.begin ee_begin,
+                  ee.end ee_end,
+                  ee.company ee_company,
+                  ee.job ee_job
+           from emp e left join emp_expr ee on e.id = ee.emp_id where
+                  e.id = #{id}
+    </select>
+
+    <!--自定义结果集ResultMap-->
+    <resultMap id="empResultMap" type="cn.zimeedu.pojo.Emp">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="name" property="name" />
+        <result column="gender" property="gender" />
+        <result column="phone" property="phone" />
+        <result column="job" property="job" />
+        <result column="salary" property="salary" />
+        <result column="image" property="image" />
+        <result column="entry_date" property="entryDate" />
+        <result column="dept_id" property="deptId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+
+        <!--封装exprList-->
+        <collection property="exprList" ofType="cn.zimeedu.pojo.EmpExpr">
+            <id column="ee_id" property="id"/>
+            <result column="ee_company" property="company"/>
+            <result column="ee_job" property="job"/>
+            <result column="ee_begin" property="begin"/>
+            <result column="ee_end" property="end"/>
+            <result column="ee_empid" property="empId"/>
+        </collection>
+    </resultMap>
+
+
+    <delete id="deleteByIds">
+--         批量删除员工信息 foreach 标签的使用  collection：表示要遍历的集合属性名称  item：表示遍历出来的每一个元素  index：表示当前元素的索引-->
+            delete from emp where id in
+            <foreach collection="ids" item="id" open="(" close=")" separator="," >
+                #{id}
+            </foreach>
+    </delete>
+
+
+    <insert id="insert" parameterType="cn.zimeedu.pojo.Emp" useGeneratedKeys = "true" keyProperty = "id">
+        insert into emp(username, name, gender, phone, job, salary, image, entry_date, dept_id, create_time, update_time)
+        values(#{username}, #{name},#{gender}, #{phone}, #{job}, #{salary}, #{image}, #{entryDate}, #{deptId}, #{createTime}, #{updateTime})
+    </insert>
+
+    <!--    =============分页查询============================-->
+    <select id="page" resultType="cn.zimeedu.pojo.Emp">
+        select emp.*, dept.name as deptName from emp left join dept on emp.dept_id = dept.id
+        <where> <!--<where>：根据查询条件，来生成where关键字，并会自动去除条件前面多余的and或or。-->
+            <if test = "name != null and name != ''">
+                emp.name like concat('%',#{name},'%')    <!--在“”内 要用字符串函数函数拼接 concat  所谓动态SQL，指的就是随着用户的输入或外部的条件的变化而变化的SQL语句。-->
+            </if>
+          <if test="gender!=null">
+              and emp.gender = #{gender}
+          </if>
+          <if test="begin!=null and end!=null">
+              and emp.entry_date between #{begin} and #{end}
+          </if>
+        </where>
+        order by emp.update_time desc
+    </select>
+
+<!--    // 统计员工职位人数-->
+    <select id="countEmpJobData" resultType="java.util.Map">
+        select
+            (case when job=1 then '班主任'
+                  when job=2 then '讲师'
+                  when job=3 then '学工主管'
+                  when job=4 then '教研主管'
+                  when job=5 then '咨询师'
+                  else '其他' end) as pos,
+            count(*) as num
+        from emp group by job order by num
+    </select>
+
+<!--    // 统计员工性别人数-->
+    <select id="countEmpSexData" resultType="java.util.Map">
+        select if(gender=1, '男性员工', '女性员工') name, count(*) value from emp group by gender
+    </select>
+
+    <select id="selectByUsernameAndPassword" resultType="cn.zimeedu.pojo.Emp">
+        select id, username, name from emp where username = #{username} and password = #{password}
+    </select>
+
+<!--    // 查询所有员工信息-->
+    <select id="list" resultType="cn.zimeedu.pojo.Emp">
+        select * from emp;
+    </select>
+    <!--    // =============原始的分页查询============================-->
+<!--    <select id="count" resultType="java.lang.Long">-->
+<!--        select count(*) from emp left join dept on emp.dept_id = dept.id;-->
+<!--    </select>-->
+
+<!--    <select id="list" resultType="cn.zimeedu.pojo.Emp">-->
+<!--        select emp.id, emp.username, emp.name, emp.gender, emp.phone, emp.entry_date, emp.salary, emp.image, emp.create_time, emp.update_time, dept.name as deptName from-->
+<!--            emp left join dept on emp.dept_id = dept.id order by emp.update_time desc limit #{statr}, #{pageSize};-->
+<!--    </select>-->
+</mapper>

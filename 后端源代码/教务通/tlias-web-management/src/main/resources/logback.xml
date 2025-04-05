@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度  %msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 按照每天生成日志文件  系统文件输出-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件输出的文件名, %i表示序号   第一个表示在服务器路径， 第二个在本机测试用-->
+<!--            <FileNamePattern>/app-log/zimeedu-%d{yyyy-MM-dd}-%i.log</FileNamePattern>-->
+            <FileNamePattern>tlias-web-management\src/main/resources/static/logzimeedu-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+            <!-- 最多保留的历史日志文件数量 -->
+            <MaxHistory>30</MaxHistory>
+            <!-- 最大文件大小，超过这个大小会触发滚动到新文件，默认为 10MB -->
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d 表示日期，%thread 表示线程名，%-5level表示级别从左显示5个字符宽度，%msg表示日志消息，%n表示换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n</pattern>
+        </encoder>
+    </appender>
+
+<!--    日志开关配置 （开启日志（ALL），取消日志（OFF）） level大于等于这个级别 不要设置权限太高-->
+    <root level="info">
+        <!--输出到控制台  元素用于引用一个已经定义好的 appender。appender 是日志系统中的一个重要概念，它负责决定日志信息输出的目标位置（如控制台、文件等）以及如何格式化这些日志信息。-->
+        <appender-ref ref="STDOUT" />
+        <!--输出到文件 ref引用 引用FILE appender-->
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

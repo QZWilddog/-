@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--头信息 约束 不动-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        1. XML映射文件的名称与Mapper接口名称一致，并且将XML映射文件和Mapper接口放置在相同包下（同包同名）-->
+<!--        2. XML映射文件的namespace属性为Mapper接口全限定名(包名+类名)一致-->
+<mapper namespace="cn.zimeedu.mapper.StudentMapper">
+    <!--    3. XML映射文件中sql语句的id与Mapper接口中的方法名一致，并保持返回类型一致。-->
+    <!--    resultType查询返回的单条记录向哪里封装所以是User(全类名)不是List<User>-->
+    <select id="page" resultType="cn.zimeedu.pojo.Student">
+        select student.*,clazz.name as clazzName from student left join clazz on clazz.id = student.clazz_id
+        <where><!--<where>：根据查询条件，来生成where关键字，并会自动去除条件前面多余的and或or。 无判断条件 不产生where  日期类型不能进行！= 会被类型转换成String-->
+            <if test="name != null and name != '' ">student.name like concat('%',#{name}, '%')</if>
+            <if test="degree != null">and student.degree = #{degree}</if>
+            <if test="clazzId != null">and student.clazz_id = #{clazzId}</if>
+        </where> order by student.update_time desc
+    </select>
+<!--    // 删除学员信息-->
+    <delete id="delById">
+        delete  from student
+        <where>
+            id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+<!--    // 添加学员信息-->
+    <insert id="add">
+        insert into student (name, no, gender, phone, id_card, is_college, address, degree, graduation_date, clazz_id, create_time, update_time) values
+        (#{name}, #{no},#{gender}, #{phone}, #{idCard},#{isCollege},#{address},#{degree},#{graduationDate},#{clazzId},#{createTime},#{updateTime})
+    </insert>
+<!--    根据id查询学员-->
+    <select id="getInfo" resultType="cn.zimeedu.pojo.Student">
+        select * from student where id = #{id}
+    </select>
+<!--    修改学员-->
+    <update id="update">  <!--自动生成set关键字，会自动删除更新字段后多余的 ,号-->
+        update student
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="no != null and no != ''">no = #{no},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="idCard != null and idCard != ''">id_card = #{idCard},</if>
+            <if test="isCollege != null">is_college = #{isCollege},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="graduationDate != null">graduation_date = #{graduationDate},</if>
+            <if test="degree != null">degree = #{degree},</if>
+            <if test="violationCount != null">violation_count = #{violationCount},</if>
+            <if test="violationScore != null">violation_score = #{violationScore},</if>
+            <if test="clazzId != null">clazz_id = #{clazzId},</if>
+            <if test="updateTime != null">update_time = #{updateTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+<!--    处理学员违纪信息-->
+    <update id="updateScore">
+        update student set violation_count = violation_count + 1, violation_score = violation_score + #{score} where id = #{id}
+    </update>
+
+<!--    统计各个班级人数-->
+    <select id="getStudentCountData" resultType="java.util.Map">
+        select clazz.name as clazz, count(*) as num from student left join clazz on student.clazz_id = clazz.id group by clazz_id order by num
+    </select>
+
+<!--    统计学员学历-->
+    <select id="getStudentDegreeData" resultType="java.util.Map">
+        select  (case when degree = 1 then '初中'
+                      when degree = 2 then '高中'
+                      when degree = 3 then '大专'
+                      when degree = 4 then '本科'
+                      when degree = 5 then '硕士'
+                      when degree = 6 then '博士'
+                      else '未填写' end) as name, count(*) as value from student group by degree order by value
+    </select>
+</mapper>

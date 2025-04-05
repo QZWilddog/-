@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--头信息 约束 不动-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--        1. XML映射文件的名称与Mapper接口名称一致，并且将XML映射文件和Mapper接口放置在相同包下（同包同名）-->
+<!--        2. XML映射文件的namespace属性为Mapper接口全限定名(包名+类名)一致-->
+<mapper namespace="cn.zimeedu.mapper.ClazzMapper">
+    <!--    3. XML映射文件中sql语句的id与Mapper接口中的方法名一致，并保持返回类型一致。-->
+    <!--    resultType查询返回的单条记录向哪里封装所以是User(全类名)不是List<User>-->
+
+<!--    分页查询 用pageHelper分页插件-->
+    <select id="list" resultType="cn.zimeedu.pojo.Clazz">
+        select clazz.id,clazz.name,clazz.room,clazz.begin_date,clazz.end_date,clazz.master_id,clazz.create_time,clazz.update_time,emp.name as masterName
+        from clazz left join emp on clazz.master_id = emp.id
+        <where><!--<where>：根据查询条件，来生成where关键字，并会自动去除条件前面多余的and或or。 无判断条件 不产生where  日期类型不能进行！= 会被类型转换成String-->
+            <if test="name != null and name != '' ">
+                clazz.name like concat('%', #{name}, '%')
+            </if>
+            <if test=" begin != null and end != null">
+                and clazz.end_date between #{begin} and #{end}
+            </if>
+        </where> order by clazz.update_time desc
+    </select>
+
+<!--    插入语句-->
+    <insert id="insert">
+        insert into clazz(name, room,begin_date, end_date, master_id, subject, create_time,update_time)
+        values (#{name},#{room}, #{beginDate},#{endDate},#{masterId},#{subject},#{createTime},#{updateTime})
+    </insert>
+<!--    删除语句-->
+    <delete id="delById">
+        delete from clazz where id = #{id}
+    </delete>
+
+<!--    查询回显-->
+    <select id="getById" resultType="cn.zimeedu.pojo.Clazz">
+        select * from clazz where id = #{id}
+    </select>
+
+<!--    修改班级-->
+    <update id="update">
+        update clazz
+        <set>   <!--自动生成set关键字，会自动删除更新字段后多余的 ,号-->
+            name = #{name},
+            begin_date = #{beginDate},
+            end_date = #{endDate},
+            subject= #{subject},
+            update_time = #{updateTime},
+            <if test="room != null and room != '' ">room = #{room},</if>
+            <if test="masterId != null and masterId != '' ">master_id = #{masterId},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+<!--    查询所有班级信息-->
+    <select id="listAll" resultType="cn.zimeedu.pojo.Clazz">
+        select * from clazz;
+    </select>
+</mapper>
