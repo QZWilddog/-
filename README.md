@@ -20,6 +20,12 @@
     代码修改完成后需要 如果需要用到头像上传功能 需要在SpringBboot 配置文件 中配置自己的阿里云OSS环境变量
  ```
   4.项目部署 阿里云云服务全家桶，可以参考黑马教学视频。  
+# 技术栈版本
+  ```
+  后端：jdk-21.0.6 、 maven-3.9.9 、  springboot-3.4.3 、 mysql-8
+  前端：vue3-3.2.38
+  部署：nginx-1.26.3 、 阿里云ECS-2核2GIB内存-RockyLinux-9.5 64位操作系统
+  ```
 # B站教程与作者的开发文档  
   视频教程：https://www.bilibili.com/video/BV1yGydYEE3H/?spm_id_from=333.1007.top_right_bar_window_default_collection.content.click&vd_source=b91376d2f18244b8dbc5a643b35d123f  
   项目开发文档：https://heuqqdmbyk.feishu.cn/wiki/G9W0wL5KYiKWrykH8UAcmxnbnuh  
