@@ -7,6 +7,7 @@
   1.利用sql脚本创建表结构与数据  
   2.打开前端源代码，以vscode为例：在package.json依赖目录下打开命令行窗口执行->npm install 下载好依赖后就可以执行npm 脚本打开了  
   3.打开后端源代码，项目结构为：（以intellij为例 打开项目后 被maven识别后依赖下载完毕->然后进行Spring Boot 配置文件修改）  
+  ```
     教务通 \\ 一个空项目结构 理解为一个文件夹  
       -tlias-parent 父工程  
       -tlias-pojo 实体类 继承父工程  
@@ -16,7 +17,8 @@
           -TliasWebManagementApplication 启动类  
         -src/main/resources/  
           -application.yml SpringBboot 配置文件    需要自己修改  
-    代码修改完成后需要 如果需要用到头像上传功能 需要在SpringBboot 配置文件 中配置自己的阿里云OSS环境变量  
+    代码修改完成后需要 如果需要用到头像上传功能 需要在SpringBboot 配置文件 中配置自己的阿里云OSS环境变量
+ ```
   4.项目部署 阿里云云服务全家桶，可以参考黑马教学视频。  
 # B站教程与作者的开发文档  
   视频教程：https://www.bilibili.com/video/BV1yGydYEE3H/?spm_id_from=333.1007.top_right_bar_window_default_collection.content.click&vd_source=b91376d2f18244b8dbc5a643b35d123f  
